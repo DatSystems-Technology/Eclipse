@@ -1,0 +1,398 @@
+--Services
+local PlayerService = game:GetService("Players")
+local findprevon = script:FindFirstChild("Prevon")
+
+print("[Eclipse] LOG - Testing Prevon")
+if findprevon then
+	warn("[Eclipse] WARNING - Restarting the Eclipse script will cause Eclipse to not function as intended on the Client end.")
+	--warn("[Eclipse] WARNING - Eclipse Shutdown via RestartAttempt")
+	--script.Disabled = true
+else
+	local prevon = Instance.new("BoolValue")
+	prevon.Parent = script
+	prevon.Name = "Prevon"
+	print("[Eclipse] LOG - Created Prevon")
+end
+print("[Eclipse] LOG - Startup")
+--ReplicatedStorageCreator
+if findprevon then
+	
+else
+	local commandgui = Instance.new("RemoteEvent")
+	commandgui.Parent = game.ReplicatedStorage
+	commandgui.Name = "CommandGui"
+	local messageservice = Instance.new("RemoteEvent")
+	messageservice.Parent = game.ReplicatedStorage
+	messageservice.Name = "MessageService"
+	local eclipserestart = Instance.new("RemoteEvent")
+	eclipserestart.Parent = game.ReplicatedStorage
+	eclipserestart.Name = "EclipseRestart"
+end
+
+print("[Eclipse] LOG - Constructed ReplicatedStorage")
+--DirectoryCreator
+if findprevon then
+	
+else
+	local permdir = Instance.new("Folder")
+	local commanddir = Instance.new("Folder")
+	local serverlocked = Instance.new("BoolValue")
+	--Permissions Creator
+	permdir.Parent = script
+	permdir.Name = "Permissions"
+	local mod = Instance.new("StringValue")
+	local hmod = Instance.new("StringValue")
+	local admin = Instance.new("StringValue")
+	local owner = Instance.new("StringValue")
+	mod.Parent = permdir
+	mod.Name = "Mod"
+	mod.Value = ""
+	hmod.Parent = permdir
+	hmod.Name = "HMod"
+	hmod.Value = ""
+	admin.Parent = permdir
+	admin.Name = "Admin"
+	admin.Value = ""
+	owner.Parent = permdir
+	owner.Name = "Owner"
+	owner.Value = "JJfriends1234"
+	--
+	commanddir.Parent = script
+	commanddir.Name = "Commands"
+	serverlocked.Parent = commanddir
+	serverlocked.Name = "ServerLocked"
+	serverlocked.Value = false
+	print("[Eclipse] LOG - Constructed Directories")
+end
+--PlayerRequestsGui
+local function onCharacterAdded(character, plr)
+	if script.GuiSettings.Active.Value == true then
+		wait(1)
+		local clonegui = script.Eclipse:Clone()
+		clonegui.Parent = game.Players[character.Name].PlayerGui
+		wait(1)
+		print("[Eclipse] LOG - Sent GUI Packet to "..character.Name)
+	else
+		warn("[Eclipse] WARNING - GUI Disabled! Users will not get feedback and some commands may not function properly")
+	end
+end
+local function onPlayerAdded(player)
+	player.CharacterAdded:Connect(onCharacterAdded, player)
+end
+PlayerService.PlayerAdded:Connect(onPlayerAdded)
+game.ReplicatedStorage.EclipseRestart.OnServerEvent:Connect(function(plr, nill)
+	local guipresent = plr.PlayerGui:FindFirstChild("Eclipse")
+	if guipresent then
+		plr.PlayerGui.Eclipse:Destroy()
+		onPlayerAdded(plr)
+	end
+end)
+game.Players.PlayerAdded:Connect(function(plr)
+	wait(2)
+	game.ReplicatedStorage.MessageService:FireClient(plr, "Eclipse Client Loaded")
+end)
+--ServerLocked
+game.Players.PlayerAdded:Connect(function(plr)
+	if script.Commands.ServerLocked.Value == true then
+		plr:Kick("[Eclipse] Server Locked")
+	end
+end)
+--Gui Creator
+if findprevon then
+	script.Eclipse:Destroy()
+end
+local guibackgroundcolor = Color3.new(script.GuiSettings.BackgroundColor.Value)
+local Eclipse = Instance.new("ScreenGui")
+local Logo = Instance.new("ImageButton")
+local MenuBorder = Instance.new("ImageLabel")
+local Menu = Instance.new("ImageLabel")
+local Title_2 = Instance.new("TextLabel")
+local DatSystems = Instance.new("TextLabel")
+local Info = Instance.new("TextLabel")
+local scriptclone = script.GuiScript:Clone()
+local Message = Instance.new("ImageLabel")
+local output = Instance.new("TextLabel")
+print("[Eclipse] LOG - Cached GUI Instances")
+Eclipse.Name = "Eclipse"
+Eclipse.Parent = script
+scriptclone.Parent = Eclipse
+scriptclone.Disabled = false
+Logo.Name = "Logo"
+Logo.Parent = Eclipse
+Logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Logo.BackgroundTransparency = 1.000
+Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Logo.BorderSizePixel = 0
+Logo.Position = UDim2.new(0.95, 0, 0.91, 0)
+Logo.Size = UDim2.new(0.04, 0, 0.071, 0)
+Logo.Image = "http://www.roblox.com/asset/?id=17082469228"
+MenuBorder.Name = "MenuBorder"
+MenuBorder.Parent = Eclipse
+MenuBorder.BackgroundTransparency = 1.000
+MenuBorder.Position = UDim2.new(0.25, 0, 0.249536172, 0)
+MenuBorder.Size = UDim2.new(0.5, 0, 0.5, 0)
+MenuBorder.Visible = false
+MenuBorder.Image = "rbxassetid://3570695787"
+MenuBorder.ImageColor3 = script.GuiSettings.BackgroundColor.Value
+MenuBorder.ImageTransparency = 0.300
+MenuBorder.ScaleType = Enum.ScaleType.Slice
+MenuBorder.SliceCenter = Rect.new(100, 100, 100, 100)
+MenuBorder.SliceScale = 0.120
+Menu.Name = "Menu"
+Menu.Parent = MenuBorder
+Menu.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Menu.BackgroundTransparency = 1.000
+Menu.Position = UDim2.new(0.00833333377, 0, 0.0148423007, 0)
+Menu.Size = UDim2.new(0.982291639, 0, 0.968379498, 0)
+Menu.Image = "rbxassetid://3570695787"
+Menu.ImageColor3 = guibackgroundcolor
+Menu.ImageTransparency = 0.600
+Menu.ScaleType = Enum.ScaleType.Slice
+Menu.SliceCenter = Rect.new(100, 100, 100, 100)
+Menu.SliceScale = 0.120
+Title_2.Name = "Title"
+Title_2.Parent = Menu
+Title_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Title_2.BackgroundTransparency = 1.000
+Title_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Title_2.BorderSizePixel = 0
+Title_2.Position = UDim2.new(0.203605518, 0, -0.000333265663, 0)
+Title_2.Size = UDim2.new(0.592540026, 0, 0.227155402, 0)
+Title_2.Font = Enum.Font.Ubuntu
+Title_2.Text = "Eclipse"
+Title_2.TextColor3 = script.GuiSettings.TextColor.Value
+Title_2.TextScaled = true
+Title_2.TextSize = 14.000
+Title_2.TextWrapped = true
+DatSystems.Name = "DatSystems"
+DatSystems.Parent = Menu
+DatSystems.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+DatSystems.BackgroundTransparency = 1.000
+DatSystems.BorderColor3 = Color3.fromRGB(0, 0, 0)
+DatSystems.BorderSizePixel = 0
+DatSystems.Position = UDim2.new(0.204665959, 0, 0.941607535, 0)
+DatSystems.Size = UDim2.new(0.591479599, 0, 0.0573095307, 0)
+DatSystems.Font = Enum.Font.Ubuntu
+DatSystems.Text = "DatSystems Technology"
+DatSystems.TextColor3 = script.GuiSettings.TextColor.Value
+DatSystems.TextScaled = true
+DatSystems.TextSize = 14.000
+DatSystems.TextWrapped = true
+Info.Name = "Info"
+Info.Parent = Menu
+Info.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Info.BackgroundTransparency = 1.000
+Info.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Info.BorderSizePixel = 0
+Info.Position = UDim2.new(0.0106044542, 0, 0.253644168, 0)
+Info.Size = UDim2.new(0.522688866, 0, 0.496126622, 0)
+Info.Font = Enum.Font.Ubuntu
+Info.Text = "This server is utilizing \"Eclipse\" by DatSystems Technology. A public system used for commands, points, and management."
+Info.TextColor3 = script.GuiSettings.TextColor.Value
+Info.TextScaled = true
+Info.TextSize = 14.000
+Info.TextWrapped = true
+Message.Name = "Message"
+Message.Parent = Eclipse
+Message.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Message.BackgroundTransparency = 1.000
+Message.Position = UDim2.new(0.0072916667, 0, 0.0110764243, 0)
+Message.Size = UDim2.new(0.984423697, 0, 0.0811524987, 0)
+Message.Image = "rbxassetid://3570695787"
+Message.ImageColor3 = script.GuiSettings.BackgroundColor.Value
+Message.ImageTransparency = 0.300
+Message.ScaleType = Enum.ScaleType.Slice
+Message.SliceCenter = Rect.new(100, 100, 100, 100)
+Message.SliceScale = 0.120
+Message.Visible = false
+output.Name = "output"
+output.Parent = Message
+output.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+output.BackgroundTransparency = 1.000
+output.BorderColor3 = Color3.fromRGB(0, 0, 0)
+output.BorderSizePixel = 0
+output.Position = UDim2.new(0.00524127204, 0, 0.157665059, 0)
+output.Size = UDim2.new(0.989997029, 0, 0.682314754, 0)
+output.Font = Enum.Font.Ubuntu
+output.Text = ""
+output.TextColor3 = script.GuiSettings.TextColor.Value
+output.TextScaled = true
+output.TextSize = 14.000
+output.TextWrapped = true
+print("[Eclipse] LOG - Cached GUI")
+--Permissions
+local function checkpermission(user, requiredrank)
+	local hasrank = script.Permissions[requiredrank].Value:find(user.Name)
+	local owner = script.Permissions.Owner.Value:find(user.Name)
+	local admin = script.Permissions.Admin.Value:find(user.Name)
+	local hmod = script.Permissions.Mod.Value:find(user.Name)
+	local mod  = script.Permissions.Mod.Value:find(user.Name)
+	if owner then
+		print("CMD Granted because "..user.Name.." is Owner")
+	else
+		print("CMD Not Granted because "..user.Name.." isn't Owner")
+		if hasrank then
+			print("CMD Granted because "..user.Name.." is of Rank")
+		else
+			print("CMD Not Granted because "..user.Name.." isn't of Rank")
+			if requiredrank == "Owner" then
+				game.ReplicatedStorage.MessageService:FireClient(user, "Insufficient Permission!")
+				error("[Eclipse] User has insufficient permission")
+			elseif requiredrank == "Admin" then
+				game.ReplicatedStorage.MessageService:FireClient(user, "Insufficient Permission!")
+				error("[Eclipse] User has insufficient permission")
+			elseif requiredrank == "HMod" then
+				if admin then
+					print("HMod CMD Granted because "..user.Name.." is Admin")
+				else
+					print("HMod CMD Not Granted because "..user.Name.." isn't Admin")
+					game.ReplicatedStorage.MessageService:FireClient(user, "Insufficient Permission!")
+					error("[Eclipse] User has insufficient permission")
+				end
+			elseif requiredrank == "Mod" then
+				if hmod then
+					print("Mod CMD Granted because "..user.Name.." is HMod")
+				elseif admin then
+					print("Mod CMD Granted because "..user.Name.." is Admin")
+				else
+				game.ReplicatedStorage.MessageService:FireClient(user, "Insufficient Permission!")
+				error("[Eclipse] User has insufficient permission")
+				end
+			else
+				game.ReplicatedStorage.MessageService:FireClient(user, "Unknown Error")
+				error("[Eclipse] Else called on Permission System")
+			end
+		end
+	end
+end
+--Commands
+local function runcommand(plr, message, commandupper, rootcommand, eclipsecommand)
+	local command, replaced = string.gsub(rootcommand, " ", "")
+
+	if eclipsecommand then
+		if command == "E!TEST" then
+			print("TEST executed")
+		elseif command == "E!MESSAGEALL" then
+			checkpermission(plr,"Mod")
+			local split = string.split(commandupper, "E!MESSAGEALL ")
+			local parameter1 = split[2]
+			local sendername = plr.Name
+			local clientmessage = ("Message From"..sendername..": "..parameter1)
+			game.ReplicatedStorage.MessageService:FireAllClients(clientmessage)
+		elseif command == "E!KICK" then
+			checkpermission(plr,"HMod")
+			local split = string.split(commandupper, "E!KICK ")
+			local parameter1 = split[2]
+			local sendername = plr.Name
+			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
+			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+			local plrexists = game.Players:FindFirstChild(plrusername)
+			if plrexists then
+				game.Players[plrusername]:Kick("[Eclipse] Kicked by "..sendername)
+				game.ReplicatedStorage.MessageService:FireClient(plr, "Kicked "..plrusername)
+				print("[Eclipse] LOG - "..plrusername.." was kicked by "..sendername)
+			else
+				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+				print("[Eclipse] LOG - "..plrusername.." was attempted kick by "..sendername.." but wasn't in the game!")
+			end
+		elseif command == "E!TEMPMOD" then
+			checkpermission(plr,"Admin")
+			local split = string.split(commandupper, "E!TEMPMOD ")
+			local parameter1 = split[2]
+			local sendername = plr.Name
+			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
+			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+			local plrexists = game.Players:FindFirstChild(plrusername)
+			if plrexists then
+				script.Permissions.Mod.Value = (script.Permissions.Mod.Value.." "..plrusername)
+				game.ReplicatedStorage.MessageService:FireClient(plr, "TempModed "..plrusername)
+			else
+				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+			end
+		elseif command == "E!TEMPADMIN" then
+			checkpermission(plr,"Owner")
+			local split = string.split(commandupper, "E!TEMPADMIN ")
+			local parameter1 = split[2]
+			local sendername = plr.Name
+			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
+			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+			local plrexists = game.Players:FindFirstChild(plrusername)
+			if plrexists then
+				script.Permissions.Mod.Value = (script.Permissions.Admin.Value.." "..plrusername)
+				game.ReplicatedStorage.MessageService:FireClient(plr, "TempAdmined "..plrusername)
+			else
+				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+			end
+		elseif command == "E!SERVERLOCK" then
+			checkpermission(plr,"HMod")
+			local split = string.split(commandupper, "E!SERVERLOCK ")
+			local parameter1 = split[2]
+			if parameter1 == "ON" or parameter1 == "ENABLE" then
+				script.Commands.ServerLocked.Value = true
+				game.ReplicatedStorage.MessageService:FireAllClients("Server Lock Enabled")
+			elseif parameter1 == "OFF" or parameter1 == "DISABLE" then
+				script.Commands.ServerLocked.Value = false
+				game.ReplicatedStorage.MessageService:FireAllClients("Server Lock Disabled")
+			else
+				game.ReplicatedStorage.MessageService:FireClient(plr, "Invalid Parameter "..parameter1)
+			end
+		elseif command == "E!STOP" then
+			checkpermission(plr,"Admin")
+			warn("[Eclipse] WARNING - Eclipse Shutdown via CMD")
+			script.Disabled = true
+		else
+			game.ReplicatedStorage.MessageService:FireClient(plr, "Invalid Command!")
+		end
+	else
+	end
+end
+--Receive Message
+game.Players.PlayerAdded:Connect(function(plr)
+	plr.Chatted:Connect(function(message)
+		local commandupper = message:upper()
+		local eclipsecommand = commandupper:match("E!")
+		local containsspace = commandupper:match(" ")
+
+		if containsspace then
+			local rootcommand = commandupper:match('^(.-) ')
+			runcommand(plr, message, commandupper, rootcommand, eclipsecommand)
+		else
+			local rootcommand = commandupper
+			runcommand(plr, message, commandupper, rootcommand, eclipsecommand)
+		end
+	end)
+end)
+game.ReplicatedStorage.EclipseRestart.OnServerEvent:Connect(function(plr, nill)
+	plr.Chatted:Connect(function(message)
+		local commandupper = message:upper()
+		local eclipsecommand = commandupper:match("E!")
+		local containsspace = commandupper:match(" ")
+
+		if containsspace then
+			local rootcommand = commandupper:match('^(.-) ')
+			runcommand(plr, message, commandupper, rootcommand, eclipsecommand)
+		else
+			local rootcommand = commandupper
+			runcommand(plr, message, commandupper, rootcommand, eclipsecommand)
+		end
+	end)
+end)
+--Startup
+local directory = script:GetFullName()
+print("")
+print("-------------------------")
+print("Eclipse Loaded")
+print("-------------------------")
+print("DatSystems Technology")
+print("By: JJfriends1234")
+print("-------------------------")
+print("Version: 1")
+print("Released: 4-10-24")
+print("")
+print("Script Location: game."..directory)
+print("-------------------------")
+print("")
+game.ReplicatedStorage.EclipseRestart:FireAllClients("cmdrestart")
+print("[Eclipse] LOG - Sent EclipseRestart")
+game.ReplicatedStorage.MessageService:FireAllClients("Eclipse Server Loaded")
+print("[Eclipse] LOG - Stack Over, Functions only!")
