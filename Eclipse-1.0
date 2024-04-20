@@ -304,7 +304,7 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
 			local plrexists = game.Players:FindFirstChild(plrusername)
 			if plrexists then
-				game.Players[plrusername].Humanoid.Health = 0
+				game.Workspace[plrusername].Humanoid.Health = 0
 				game.ReplicatedStorage.MessageService:FireClient(plr, "Killed "..plrusername)
 			else
 				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
