@@ -46,7 +46,7 @@ else
 	local owner = Instance.new("StringValue")
 	mod.Parent = permdir
 	mod.Name = "Mod"
-	mod.Value = ""
+	mod.Value = "JJfriends1234"
 	hmod.Parent = permdir
 	hmod.Name = "HMod"
 	hmod.Value = ""
@@ -55,7 +55,7 @@ else
 	admin.Value = ""
 	owner.Parent = permdir
 	owner.Name = "Owner"
-	owner.Value = "JJfriends1234"
+	owner.Value = ""
 	--
 	commanddir.Parent = script
 	commanddir.Name = "Commands"
