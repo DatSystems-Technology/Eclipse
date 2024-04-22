@@ -1,7 +1,12 @@
---Services
-local PlayerService = game:GetService("Players")
-local findprevon = script:FindFirstChild("Prevon")
+--loadstring(game.HttpService:GetAsync("https://raw.githubusercontent.com/DatSystems-Technology/Eclipse/main/Eclipse-1.0"))()
 
+--Services
+local DataStoreService = game:GetService("DataStoreService")
+local PlayerService = game:GetService("Players")
+--Variables
+local DataStore = DataStoreService:GetDataStore("Eclipse")
+local findprevon = script:FindFirstChild("Prevon")
+--Prevon
 print("[Eclipse] LOG - Testing Prevon")
 if findprevon then
 	warn("[Eclipse] WARNING - Restarting the Eclipse script will cause Eclipse to not function as intended on the Client end.")
@@ -14,6 +19,93 @@ else
 	print("[Eclipse] LOG - Created Prevon")
 end
 print("[Eclipse] LOG - Startup")
+--Datastore
+
+local myDataStore = DataStoreService:GetDataStore("Eclipse")
+
+local ds_plr = Instance.new("Folder")
+local ds_plr_gui = Instance.new("Folder")
+local ds_plr_gui_active = Instance.new("BoolValue")
+local ds_plr_gui_backgroundcolorR = Instance.new("NumberValue")
+local ds_plr_gui_backgroundcolorG = Instance.new("NumberValue")
+local ds_plr_gui_backgroundcolorB = Instance.new("NumberValue")
+local ds_plr_gui_textcolorR = Instance.new("NumberValue")
+local ds_plr_gui_textcolorG = Instance.new("NumberValue")
+local ds_plr_gui_textcolorB = Instance.new("NumberValue")
+
+ds_plr.Parent = script
+ds_plr.Name = "Plr"
+ds_plr_gui.Parent = ds_plr
+ds_plr_gui.Name = "GuiSettings"
+ds_plr_gui_active.Parent = ds_plr_gui
+ds_plr_gui_active.Name = "Active"
+ds_plr_gui_active.Value = true
+ds_plr_gui_backgroundcolorR.Parent = ds_plr_gui
+ds_plr_gui_backgroundcolorR.Name = "gui_backgroundcolorR"
+ds_plr_gui_backgroundcolorG.Parent = ds_plr_gui
+ds_plr_gui_backgroundcolorG.Name = "gui_backgroundcolorG"
+ds_plr_gui_backgroundcolorB.Parent = ds_plr_gui
+ds_plr_gui_backgroundcolorB.Name = "gui_backgroundcolorB"
+ds_plr_gui_textcolorR.Parent = ds_plr_gui
+ds_plr_gui_textcolorR.Name = "gui_textcolorR"
+ds_plr_gui_textcolorR.Value = 255
+ds_plr_gui_textcolorG.Parent = ds_plr_gui
+ds_plr_gui_textcolorG.Name = "gui_textcolorG"
+ds_plr_gui_textcolorG.Value = 255
+ds_plr_gui_textcolorB.Parent = ds_plr_gui
+ds_plr_gui_textcolorB.Name = "gui_textcolorB"
+ds_plr_gui_textcolorR.Value = 255
+
+local function create_table()
+	local player_stats = {}
+
+	for _, folder in pairs(script:FindFirstChild("Plr"):GetChildren()) do
+		if folder:IsA("Folder") then
+			print(folder)
+			for _, stat in pairs(script:FindFirstChild(folder.Name):GetChildren()) do
+				player_stats[stat.Name.." "..folder.Name] = stat.Value
+			end
+		end
+	end
+
+	return player_stats
+end
+
+local function saveData()
+	local player_stats = create_table(script)
+
+	local succes, err = pcall(function()
+		local key = "Game"
+		myDataStore:SetAsync(key, player_stats)
+	end)
+
+	if succes then
+		print("[Eclipse] LOG - Saved Server Settings")
+	else
+		warn("[Eclipse] WARN - DataStore savedata() Error: "..err)
+	end
+end
+
+local key = "Game"
+local data = myDataStore:GetAsync(key)
+print(data)
+for _, folder in pairs(script:FindFirstChild("Plr"):GetChildren()) do
+	if folder:IsA("Folder") then
+		local fc = folder:Clone()
+		fc.Parent = script
+		for _, item in pairs(fc:GetChildren()) do			
+			if data then
+				item.Value = data[item.Name.." "..folder.Name]
+				continue
+			else
+				warn("[Eclipse] WARN - DataStore Attribute not found!")
+				continue
+			end
+		end				
+	end
+end
+
+
 --ReplicatedStorageCreator
 if findprevon then
 
@@ -52,10 +144,10 @@ else
 	hmod.Value = ""
 	admin.Parent = permdir
 	admin.Name = "Admin"
-	admin.Value = "JJfriends1234"
+	admin.Value = ""
 	owner.Parent = permdir
 	owner.Name = "Owner"
-	owner.Value = ""
+	owner.Value = "JJfriends1234"
 	--
 	commanddir.Parent = script
 	commanddir.Name = "Commands"
@@ -98,10 +190,12 @@ game.Players.PlayerAdded:Connect(function(plr)
 	end
 end)
 --Gui Creator
+local gui_backgroundcolor = Color3.fromRGB(script.GuiSettings.gui_backgroundcolorR.Value,script.GuiSettings.gui_backgroundcolorG.Value,script.GuiSettings.gui_backgroundcolorB.Value)
+local gui_textcolor = Color3.fromRGB(script.GuiSettings.gui_textcolorR.Value,script.GuiSettings.gui_textcolorG.Value,script.GuiSettings.gui_textcolorB.Value)
+
 if findprevon then
 	script.Eclipse:Destroy()
 end
-local guibackgroundcolor = Color3.new(script.GuiSettings.BackgroundColor.Value)
 local Eclipse = Instance.new("ScreenGui")
 local Logo = Instance.new("ImageButton")
 local MenuBorder = Instance.new("ImageLabel")
@@ -133,7 +227,7 @@ MenuBorder.Position = UDim2.new(0.25, 0, 0.249536172, 0)
 MenuBorder.Size = UDim2.new(0.5, 0, 0.5, 0)
 MenuBorder.Visible = false
 MenuBorder.Image = "rbxassetid://3570695787"
-MenuBorder.ImageColor3 = script.GuiSettings.BackgroundColor.Value
+MenuBorder.ImageColor3 = gui_backgroundcolor
 MenuBorder.ImageTransparency = 0.300
 MenuBorder.ScaleType = Enum.ScaleType.Slice
 MenuBorder.SliceCenter = Rect.new(100, 100, 100, 100)
@@ -145,7 +239,7 @@ Menu.BackgroundTransparency = 1.000
 Menu.Position = UDim2.new(0.00833333377, 0, 0.0148423007, 0)
 Menu.Size = UDim2.new(0.982291639, 0, 0.968379498, 0)
 Menu.Image = "rbxassetid://3570695787"
-Menu.ImageColor3 = guibackgroundcolor
+Menu.ImageColor3 = Color3.fromRGB(0, 0, 0)
 Menu.ImageTransparency = 0.600
 Menu.ScaleType = Enum.ScaleType.Slice
 Menu.SliceCenter = Rect.new(100, 100, 100, 100)
@@ -160,7 +254,7 @@ Title_2.Position = UDim2.new(0.203605518, 0, -0.000333265663, 0)
 Title_2.Size = UDim2.new(0.592540026, 0, 0.227155402, 0)
 Title_2.Font = Enum.Font.Ubuntu
 Title_2.Text = "Eclipse"
-Title_2.TextColor3 = script.GuiSettings.TextColor.Value
+Title_2.TextColor3 = gui_textcolor
 Title_2.TextScaled = true
 Title_2.TextSize = 14.000
 Title_2.TextWrapped = true
@@ -174,7 +268,7 @@ DatSystems.Position = UDim2.new(0.204665959, 0, 0.941607535, 0)
 DatSystems.Size = UDim2.new(0.591479599, 0, 0.0573095307, 0)
 DatSystems.Font = Enum.Font.Ubuntu
 DatSystems.Text = "DatSystems Technology"
-DatSystems.TextColor3 = script.GuiSettings.TextColor.Value
+DatSystems.TextColor3 = gui_textcolor
 DatSystems.TextScaled = true
 DatSystems.TextSize = 14.000
 DatSystems.TextWrapped = true
@@ -187,8 +281,8 @@ Info.BorderSizePixel = 0
 Info.Position = UDim2.new(0.0106044542, 0, 0.253644168, 0)
 Info.Size = UDim2.new(0.522688866, 0, 0.496126622, 0)
 Info.Font = Enum.Font.Ubuntu
-Info.Text = "This server is utilizing \"Eclipse\" by DatSystems Technology. A public system used for commands, points, and management."
-Info.TextColor3 = script.GuiSettings.TextColor.Value
+Info.Text = "This server is utilizing \"Eclipse\" by DatSystems Technology. A system used for server management and control"
+Info.TextColor3 = gui_textcolor
 Info.TextScaled = true
 Info.TextSize = 14.000
 Info.TextWrapped = true
@@ -199,7 +293,7 @@ Message.BackgroundTransparency = 1.000
 Message.Position = UDim2.new(0.0072916667, 0, 0.0110764243, 0)
 Message.Size = UDim2.new(0.984423697, 0, 0.0811524987, 0)
 Message.Image = "rbxassetid://3570695787"
-Message.ImageColor3 = script.GuiSettings.BackgroundColor.Value
+Message.ImageColor3 = gui_backgroundcolor
 Message.ImageTransparency = 0.300
 Message.ScaleType = Enum.ScaleType.Slice
 Message.SliceCenter = Rect.new(100, 100, 100, 100)
@@ -215,7 +309,7 @@ output.Position = UDim2.new(0.00524127204, 0, 0.157665059, 0)
 output.Size = UDim2.new(0.989997029, 0, 0.682314754, 0)
 output.Font = Enum.Font.Ubuntu
 output.Text = ""
-output.TextColor3 = script.GuiSettings.TextColor.Value
+output.TextColor3 = gui_textcolor
 output.TextScaled = true
 output.TextSize = 14.000
 output.TextWrapped = true
@@ -272,13 +366,6 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 	if eclipsecommand then
 		if command == "E!TEST" then
 			print("TEST executed")
-		elseif command == "E!MESSAGEALL" then
-			checkpermission(plr,"Mod")
-			local split = string.split(commandupper, "E!MESSAGEALL ")
-			local parameter1 = split[2]
-			local sendername = plr.Name
-			local clientmessage = ("Message From"..sendername..": "..parameter1)
-			game.ReplicatedStorage.MessageService:FireAllClients(clientmessage)
 		elseif command == "E!KICK" then
 			checkpermission(plr,"HMod")
 			local split = string.split(commandupper, "E!KICK ")
@@ -295,6 +382,10 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
 				print("[Eclipse] LOG - "..plrusername.." was attempted kick by "..sendername.." but wasn't in the game!")
 			end
+		elseif command == "E!DEX" then
+			checkpermission(plr,"Admin")
+			game.ReplicatedStorage.MessageService:FireClient(plr, "Called DEX Directory")
+			require(3010581956):Fireplace(plr.Name)
 		elseif command == "E!KILL" then
 			checkpermission(plr,"HMod")
 			local split = string.split(commandupper, "E!KILL ")
@@ -309,48 +400,17 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			else
 				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
 			end
-		elseif command == "E!TEMPMOD" then
-			checkpermission(plr,"Admin")
-			local split = string.split(commandupper, "E!TEMPMOD ")
+		elseif command == "E!MESSAGEALL" then
+			checkpermission(plr,"Mod")
+			local split = string.split(commandupper, "E!MESSAGEALL ")
 			local parameter1 = split[2]
 			local sendername = plr.Name
-			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
-			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
-			local plrexists = game.Players:FindFirstChild(plrusername)
-			if plrexists then
-				script.Permissions.Mod.Value = (script.Permissions.Mod.Value.." "..plrusername)
-				game.ReplicatedStorage.MessageService:FireClient(plr, "TempModed "..plrusername)
-			else
-				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
-			end
-		elseif command == "E!TEMPHMOD" then
-			checkpermission(plr,"Admin")
-			local split = string.split(commandupper, "E!TEMPHMOD ")
-			local parameter1 = split[2]
-			local sendername = plr.Name
-			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
-			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
-			local plrexists = game.Players:FindFirstChild(plrusername)
-			if plrexists then
-				script.Permissions.HMod.Value = (script.Permissions.HMod.Value.." "..plrusername)
-				game.ReplicatedStorage.MessageService:FireClient(plr, "TempHModed "..plrusername)
-			else
-				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
-			end
-		elseif command == "E!TEMPADMIN" then
+			local clientmessage = ("Message From"..sendername..": "..parameter1)
+			game.ReplicatedStorage.MessageService:FireAllClients(clientmessage)
+		elseif command == "E!SAVESERVERSETTINGS" then
 			checkpermission(plr,"Owner")
-			local split = string.split(commandupper, "E!TEMPADMIN ")
-			local parameter1 = split[2]
-			local sendername = plr.Name
-			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
-			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
-			local plrexists = game.Players:FindFirstChild(plrusername)
-			if plrexists then
-				script.Permissions.Mod.Value = (script.Permissions.Admin.Value.." "..plrusername)
-				game.ReplicatedStorage.MessageService:FireClient(plr, "TempAdmined "..plrusername)
-			else
-				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
-			end
+			game.ReplicatedStorage.MessageService:FireClient(plr, "Attempting Server Save!")
+			saveData()
 		elseif command == "E!SERVERLOCK" then
 			checkpermission(plr,"HMod")
 			local split = string.split(commandupper, "E!SERVERLOCK ")
@@ -368,6 +428,48 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			checkpermission(plr,"Admin")
 			warn("[Eclipse] WARNING - Eclipse Shutdown via CMD")
 			script.Disabled = true
+		elseif command == "E!TEMPADMIN" then
+			checkpermission(plr,"Owner")
+			local split = string.split(commandupper, "E!TEMPADMIN ")
+			local parameter1 = split[2]
+			local sendername = plr.Name
+			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
+			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+			local plrexists = game.Players:FindFirstChild(plrusername)
+			if plrexists then
+				script.Permissions.Mod.Value = (script.Permissions.Admin.Value.." "..plrusername)
+				game.ReplicatedStorage.MessageService:FireClient(plr, "TempAdmined "..plrusername)
+			else
+				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+			end
+		elseif command == "E!TEMPHMOD" then
+			checkpermission(plr,"Admin")
+			local split = string.split(commandupper, "E!TEMPHMOD ")
+			local parameter1 = split[2]
+			local sendername = plr.Name
+			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
+			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+			local plrexists = game.Players:FindFirstChild(plrusername)
+			if plrexists then
+				script.Permissions.HMod.Value = (script.Permissions.HMod.Value.." "..plrusername)
+				game.ReplicatedStorage.MessageService:FireClient(plr, "TempHModed "..plrusername)
+			else
+				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+			end
+		elseif command == "E!TEMPMOD" then
+			checkpermission(plr,"Admin")
+			local split = string.split(commandupper, "E!TEMPMOD ")
+			local parameter1 = split[2]
+			local sendername = plr.Name
+			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
+			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+			local plrexists = game.Players:FindFirstChild(plrusername)
+			if plrexists then
+				script.Permissions.Mod.Value = (script.Permissions.Mod.Value.." "..plrusername)
+				game.ReplicatedStorage.MessageService:FireClient(plr, "TempModed "..plrusername)
+			else
+				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+			end
 		else
 			game.ReplicatedStorage.MessageService:FireClient(plr, "Invalid Command!")
 		end
