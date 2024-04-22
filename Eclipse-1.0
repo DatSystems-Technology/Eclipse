@@ -63,7 +63,7 @@ ds_plr_gui_textcolorG.Name = "gui_textcolorG"
 ds_plr_gui_textcolorG.Value = 255
 ds_plr_gui_textcolorB.Parent = ds_plr_gui
 ds_plr_gui_textcolorB.Name = "gui_textcolorB"
-ds_plr_gui_textcolorR.Value = 255
+ds_plr_gui_textcolorB.Value = 255
 ds_plr_perm.Parent = ds_plr
 ds_plr_perm.Name = "Permissions"
 ds_plr_perm_mod.Parent = ds_plr_perm
@@ -90,26 +90,30 @@ local function create_table()
 	end
 
 	return player_stats
+	print("[Eclipse] DATASTORE - Loaded Datastore!")
+	print("[Eclipse] DATASTORE - DataStore Name: Eclipse")
+	print("[Eclipse] DATASTORE - DataStore Key: Game")
 end
 
-local function saveData()
+local function saveData(plr)
 	local player_stats = create_table(script)
 
 	local succes, err = pcall(function()
 		local key = "Game"
 		myDataStore:SetAsync(key, player_stats)
 	end)
-
+	wait(2)
 	if succes then
-		print("[Eclipse] LOG - Saved Server Settings")
+		print("[Eclipse] DATASTORE  - Saved Server Settings")
+		game.ReplicatedStorage.MessageService:FireClient(plr, "Datastore - Save Success")
 	else
-		warn("[Eclipse] WARN - DataStore savedata() Error: "..err)
+		warn("[Eclipse] DATASTORE WARN - DataStore savedata() Error: "..err)
+		game.ReplicatedStorage.MessageService:FireClient(plr, "Datastore - Failed to save!")
 	end
 end
 
 local key = "Game"
 local data = myDataStore:GetAsync(key)
-print(data)
 for _, folder in pairs(script:FindFirstChild("Plr"):GetChildren()) do
 	if folder:IsA("Folder") then
 		local fc = folder:Clone()
@@ -119,7 +123,7 @@ for _, folder in pairs(script:FindFirstChild("Plr"):GetChildren()) do
 				item.Value = data[item.Name.." "..folder.Name]
 				continue
 			else
-				warn("[Eclipse] WARN - DataStore Attribute not found!")
+				warn("[Eclipse] DATASTORE WARN - DataStore Attribute not found!")
 				continue
 			end
 		end				
@@ -407,7 +411,7 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 		elseif command == "E!SAVESERVERSETTINGS" then
 			checkpermission(plr,"Owner")
 			game.ReplicatedStorage.MessageService:FireClient(plr, "Attempting Server Save!")
-			saveData()
+			saveData(plr)
 		elseif command == "E!SERVERLOCK" then
 			checkpermission(plr,"HMod")
 			local split = string.split(commandupper, "E!SERVERLOCK ")
