@@ -29,6 +29,7 @@ end
 print("[Eclipse] LOG - Startup")
 
 --Webhook
+
 local webhook_url = "https://discord.com/api/webhooks/1232003291454378115/wsc-UYEmCPgU8YnXjJrB2gTwtHiWUXjQE-NXVWdA6S8Al0ec-RBgbAVB059tCrzVa6Iy"
 local function webhook(message)
 	local Data = {
@@ -549,5 +550,5 @@ print("-------------------------")
 print("")
 game.ReplicatedStorage.EclipseRestart:FireAllClients("cmdrestart")
 print("[Eclipse] LOG - Sent EclipseRestart")
-webhook("test")
+webhook("[Eclipse] LOG - NewSession")
 print("[Eclipse] LOG - Over, Functions only!")
