@@ -30,7 +30,7 @@ print("[Eclipse] LOG - Startup")
 
 --Webhook
 local url = "https://discord.com/api/webhooks/1232003291454378115/wsc-UYEmCPgU8YnXjJrB2gTwtHiWUXjQE-NXVWdA6S8Al0ec-RBgbAVB059tCrzVa6Iy"
-local function SendMessage(message)
+local function webhook(message)
     local http = game:GetService("HttpService")
     local headers = {
         ["Content-Type"] = "application/json"
