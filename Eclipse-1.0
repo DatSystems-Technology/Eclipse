@@ -8,7 +8,6 @@ local PlayerService = game:GetService("Players")
 
 local DataStore = DataStoreService:GetDataStore("Eclipse")
 local findprevon = script:FindFirstChild("Prevon")
-
 --Prevon
 
 print("[Eclipse] LOG - Testing Prevon")
@@ -35,8 +34,8 @@ local function webhook(message)
 	local Data = {
 		["content"] = message
 	}
-	Data = HttpService:JSONEncode(Data)
-	HttpService:PostAsync(webhook_url, Data)
+	Data = http:JSONEncode(Data)
+	http:PostAsync(webhook_url, Data)
 end
 
 --Datastore
@@ -160,14 +159,14 @@ end
 
 --DirectoryCreator
 
-	local commanddir = Instance.new("Folder")
-	local serverlocked = Instance.new("BoolValue")
-	commanddir.Parent = script
-	commanddir.Name = "Commands"
-	serverlocked.Parent = commanddir
-	serverlocked.Name = "ServerLocked"
-	serverlocked.Value = false
-	print("[Eclipse] LOG - Constructed Directories")
+local commanddir = Instance.new("Folder")
+local serverlocked = Instance.new("BoolValue")
+commanddir.Parent = script
+commanddir.Name = "Commands"
+serverlocked.Parent = commanddir
+serverlocked.Name = "ServerLocked"
+serverlocked.Value = false
+print("[Eclipse] LOG - Constructed Directories")
 
 --PlayerRequestsGui
 
@@ -550,5 +549,9 @@ print("-------------------------")
 print("")
 game.ReplicatedStorage.EclipseRestart:FireAllClients("cmdrestart")
 print("[Eclipse] LOG - Sent EclipseRestart")
-webhook("[Eclipse] LOG - NewSession")
+if findprevon then
+	webhook("[Eclipse] LOG - NewSession(Game="..game.GameId.." Place="..game.PlaceId.." Prevon=true)")
+else
+	webhook("[Eclipse] LOG - NewSession(Game="..game.GameId.." Place="..game.PlaceId.." Prevon=false)")
+end
 print("[Eclipse] LOG - Over, Functions only!")
