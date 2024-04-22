@@ -122,7 +122,7 @@ for _, folder in pairs(script:FindFirstChild("Plr"):GetChildren()) do
 				item.Value = data[item.Name.." "..folder.Name]
 				continue
 			else
-				warn("[Eclipse] DATASTORE WARN - DataStore Attribute not found!")
+				warn("[Eclipse] DATASTORE WARN - DataStore Default Value Loaded! Run /"e!saveserversettings/" to avoid this issue")
 				continue
 			end
 		end				
