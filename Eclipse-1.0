@@ -29,17 +29,18 @@ end
 print("[Eclipse] LOG - Startup")
 
 --Webhook
-
-local function webhook(webhook_msg)
+local url = "https://discord.com/api/webhooks/1232003291454378115/wsc-UYEmCPgU8YnXjJrB2gTwtHiWUXjQE-NXVWdA6S8Al0ec-RBgbAVB059tCrzVa6Iy"
+local function SendMessage(message)
+    local http = game:GetService("HttpService")
     local headers = {
         ["Content-Type"] = "application/json"
     }
     local data = {
-        ["content"] = webhook_msg
+        ["content"] = message
     }
     local body = http:JSONEncode(data)
     local response = request({
-        Url = "https://discord.com/api/webhooks/1232003291454378115/wsc-UYEmCPgU8YnXjJrB2gTwtHiWUXjQE-NXVWdA6S8Al0ec-RBgbAVB059tCrzVa6Iy",
+        Url = url,
         Method = "POST",
         Headers = headers,
         Body = body
