@@ -101,7 +101,7 @@ local function saveData(plr)
 		local key = "Game"
 		myDataStore:SetAsync(key, player_stats)
 	end)
-	wait(2)
+	wait(4)
 	if succes then
 		print("[Eclipse] DATASTORE  - Saved Server Settings")
 		game.ReplicatedStorage.MessageService:FireClient(plr, "Datastore - Save Success")
