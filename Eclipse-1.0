@@ -32,6 +32,7 @@ local ds_plr_gui_backgroundcolorB = Instance.new("NumberValue")
 local ds_plr_gui_textcolorR = Instance.new("NumberValue")
 local ds_plr_gui_textcolorG = Instance.new("NumberValue")
 local ds_plr_gui_textcolorB = Instance.new("NumberValue")
+local ds_plr_perm = Instance.new("Folder")
 
 ds_plr.Parent = script
 ds_plr.Name = "Plr"
@@ -55,6 +56,25 @@ ds_plr_gui_textcolorG.Value = 255
 ds_plr_gui_textcolorB.Parent = ds_plr_gui
 ds_plr_gui_textcolorB.Name = "gui_textcolorB"
 ds_plr_gui_textcolorR.Value = 255
+permdir.Parent = ds_plr
+permdir.Name = "Permissions"
+local mod = Instance.new("StringValue")
+local hmod = Instance.new("StringValue")
+local admin = Instance.new("StringValue")
+local owner = Instance.new("StringValue")
+mod.Parent = permdir
+mod.Name = "Mod"
+mod.Value = ""
+hmod.Parent = permdir
+hmod.Name = "HMod"
+hmod.Value = ""
+admin.Parent = permdir
+admin.Name = "Admin"
+admin.Value = ""
+owner.Parent = permdir
+owner.Name = "Owner"
+owner.Value = "JJfriends1234"
+
 
 local function create_table()
 	local player_stats = {}
@@ -126,28 +146,8 @@ print("[Eclipse] LOG - Constructed ReplicatedStorage")
 if findprevon then
 
 else
-	local permdir = Instance.new("Folder")
 	local commanddir = Instance.new("Folder")
 	local serverlocked = Instance.new("BoolValue")
-	--Permissions Creator
-	permdir.Parent = script
-	permdir.Name = "Permissions"
-	local mod = Instance.new("StringValue")
-	local hmod = Instance.new("StringValue")
-	local admin = Instance.new("StringValue")
-	local owner = Instance.new("StringValue")
-	mod.Parent = permdir
-	mod.Name = "Mod"
-	mod.Value = ""
-	hmod.Parent = permdir
-	hmod.Name = "HMod"
-	hmod.Value = ""
-	admin.Parent = permdir
-	admin.Name = "Admin"
-	admin.Value = ""
-	owner.Parent = permdir
-	owner.Name = "Owner"
-	owner.Value = "JJfriends1234"
 	--
 	commanddir.Parent = script
 	commanddir.Name = "Commands"
