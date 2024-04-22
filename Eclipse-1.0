@@ -88,11 +88,10 @@ local function create_table()
 			end
 		end
 	end
-
-	return player_stats
 	print("[Eclipse] DATASTORE - Loaded Datastore!")
 	print("[Eclipse] DATASTORE - DataStore Name: Eclipse")
 	print("[Eclipse] DATASTORE - DataStore Key: Game")
+	return player_stats
 end
 
 local function saveData(plr)
