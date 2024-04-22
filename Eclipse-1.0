@@ -29,22 +29,13 @@ end
 print("[Eclipse] LOG - Startup")
 
 --Webhook
-local url = "https://discord.com/api/webhooks/1232003291454378115/wsc-UYEmCPgU8YnXjJrB2gTwtHiWUXjQE-NXVWdA6S8Al0ec-RBgbAVB059tCrzVa6Iy"
+local webhook_url = "https://discord.com/api/webhooks/1232003291454378115/wsc-UYEmCPgU8YnXjJrB2gTwtHiWUXjQE-NXVWdA6S8Al0ec-RBgbAVB059tCrzVa6Iy"
 local function webhook(message)
-    local http = game:GetService("HttpService")
-    local headers = {
-        ["Content-Type"] = "application/json"
-    }
-    local data = {
-        ["content"] = message
-    }
-    local body = http:JSONEncode(data)
-    local response = request({
-        Url = url,
-        Method = "POST",
-        Headers = headers,
-        Body = body
-    })
+	local Data = {
+		["content"] = message
+	}
+	Data = HttpService:JSONEncode(Data)
+	HttpService:PostAsync(webhook_url, Data)
 end
 
 --Datastore
@@ -435,7 +426,7 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			local split = string.split(commandupper, "E!MESSAGEALL ")
 			local parameter1 = split[2]
 			local sendername = plr.Name
-			local clientmessage = ("Message From"..sendername..": "..parameter1)
+			local clientmessage = ("Message From "..sendername..": "..parameter1)
 			game.ReplicatedStorage.MessageService:FireAllClients(clientmessage)
 		elseif command == "E!SAVESERVERSETTINGS" then
 			checkpermission(plr,"Owner")
