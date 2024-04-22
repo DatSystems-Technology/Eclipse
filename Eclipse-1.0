@@ -12,6 +12,10 @@ if findprevon then
 	warn("[Eclipse] WARNING - Restarting the Eclipse script will cause Eclipse to not function as intended on the Client end.")
 	--warn("[Eclipse] WARNING - Eclipse Shutdown via RestartAttempt")
 	--script.Disabled = true
+	script.Permissions:Destroy()
+	script.Commands:Destroy()
+	script.GuiSettings:Destroy()
+	script.Plr:Destroy()
 else
 	local prevon = Instance.new("BoolValue")
 	prevon.Parent = script
@@ -33,6 +37,10 @@ local ds_plr_gui_textcolorR = Instance.new("NumberValue")
 local ds_plr_gui_textcolorG = Instance.new("NumberValue")
 local ds_plr_gui_textcolorB = Instance.new("NumberValue")
 local ds_plr_perm = Instance.new("Folder")
+local ds_plr_perm_owner = Instance.new("StringValue")
+local ds_plr_perm_admin = Instance.new("StringValue")
+local ds_plr_perm_hmod = Instance.new("StringValue")
+local ds_plr_perm_mod = Instance.new("StringValue")
 
 ds_plr.Parent = script
 ds_plr.Name = "Plr"
@@ -58,22 +66,15 @@ ds_plr_gui_textcolorB.Name = "gui_textcolorB"
 ds_plr_gui_textcolorR.Value = 255
 ds_plr_perm.Parent = ds_plr
 ds_plr_perm.Name = "Permissions"
-local mod = Instance.new("StringValue")
-local hmod = Instance.new("StringValue")
-local admin = Instance.new("StringValue")
-local owner = Instance.new("StringValue")
-mod.Parent = ds_plr_perm
-mod.Name = "Mod"
-mod.Value = ""
-hmod.Parent = ds_plr_perm
-hmod.Name = "HMod"
-hmod.Value = ""
-admin.Parent = ds_plr_perm
-admin.Name = "Admin"
-admin.Value = ""
-owner.Parent = ds_plr_perm
-owner.Name = "Owner"
-owner.Value = "JJfriends1234"
+ds_plr_perm_mod.Parent = ds_plr_perm
+ds_plr_perm_mod.Name = "Mod"
+ds_plr_perm_hmod.Parent = ds_plr_perm
+ds_plr_perm_hmod.Name = "HMod"
+ds_plr_perm_admin.Parent = ds_plr_perm
+ds_plr_perm_admin.Name = "Admin"
+ds_plr_perm_owner.Parent = ds_plr_perm
+ds_plr_perm_owner.Name = "Owner"
+ds_plr_perm_owner.Value = "JJfriends1234"
 
 
 local function create_table()
@@ -143,9 +144,6 @@ end
 
 print("[Eclipse] LOG - Constructed ReplicatedStorage")
 --DirectoryCreator
-if findprevon then
-
-else
 	local commanddir = Instance.new("Folder")
 	local serverlocked = Instance.new("BoolValue")
 	--
@@ -155,7 +153,6 @@ else
 	serverlocked.Name = "ServerLocked"
 	serverlocked.Value = false
 	print("[Eclipse] LOG - Constructed Directories")
-end
 --PlayerRequestsGui
 local function onCharacterAdded(character, plr)
 	if script.GuiSettings.Active.Value == true then
