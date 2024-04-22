@@ -1,12 +1,16 @@
---loadstring(game.HttpService:GetAsync("https://raw.githubusercontent.com/DatSystems-Technology/Eclipse/main/Eclipse-1.0"))()
-
 --Services
+
+local http = game:GetService("HttpService")
 local DataStoreService = game:GetService("DataStoreService")
 local PlayerService = game:GetService("Players")
+
 --Variables
+
 local DataStore = DataStoreService:GetDataStore("Eclipse")
 local findprevon = script:FindFirstChild("Prevon")
+
 --Prevon
+
 print("[Eclipse] LOG - Testing Prevon")
 if findprevon then
 	warn("[Eclipse] WARNING - Restarting the Eclipse script will cause Eclipse to not function as intended on the Client end.")
@@ -23,10 +27,29 @@ else
 	print("[Eclipse] LOG - Created Prevon")
 end
 print("[Eclipse] LOG - Startup")
+
+--Webhook
+
+local function webhook(webhook_msg)
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+    local data = {
+        ["content"] = webhook_msg
+    }
+    local body = http:JSONEncode(data)
+    local response = request({
+        Url = "https://discord.com/api/webhooks/1232003291454378115/wsc-UYEmCPgU8YnXjJrB2gTwtHiWUXjQE-NXVWdA6S8Al0ec-RBgbAVB059tCrzVa6Iy",
+        Method = "POST",
+        Headers = headers,
+        Body = body
+    })
+end
+
 --Datastore
 
 local myDataStore = DataStoreService:GetDataStore("Eclipse")
-
+--Default Directory
 local ds_plr = Instance.new("Folder")
 local ds_plr_gui = Instance.new("Folder")
 local ds_plr_gui_active = Instance.new("BoolValue")
@@ -41,7 +64,6 @@ local ds_plr_perm_owner = Instance.new("StringValue")
 local ds_plr_perm_admin = Instance.new("StringValue")
 local ds_plr_perm_hmod = Instance.new("StringValue")
 local ds_plr_perm_mod = Instance.new("StringValue")
-
 ds_plr.Parent = script
 ds_plr.Name = "Plr"
 ds_plr_gui.Parent = ds_plr
@@ -76,10 +98,8 @@ ds_plr_perm_owner.Parent = ds_plr_perm
 ds_plr_perm_owner.Name = "Owner"
 ds_plr_perm_owner.Value = "JJfriends1234"
 
-
 local function create_table()
 	local player_stats = {}
-
 	for _, folder in pairs(script:FindFirstChild("Plr"):GetChildren()) do
 		if folder:IsA("Folder") then
 			print(folder)
@@ -122,17 +142,16 @@ for _, folder in pairs(script:FindFirstChild("Plr"):GetChildren()) do
 				item.Value = data[item.Name.." "..folder.Name]
 				continue
 			else
-				warn("[Eclipse] DATASTORE WARN - DataStore Default Value Loaded! Run e!saveserversettings to avoid this issue")
+				warn("[Eclipse] DATASTORE WARN - Failed to recall value - Loaded DEF! This is normal if this is the first launch of Eclipse")
 				continue
 			end
 		end				
 	end
 end
 
-
 --ReplicatedStorageCreator
-if findprevon then
 
+if findprevon then
 else
 	local commandgui = Instance.new("RemoteEvent")
 	commandgui.Parent = game.ReplicatedStorage
@@ -143,20 +162,22 @@ else
 	local eclipserestart = Instance.new("RemoteEvent")
 	eclipserestart.Parent = game.ReplicatedStorage
 	eclipserestart.Name = "EclipseRestart"
+	print("[Eclipse] LOG - Constructed ReplicatedStorage")
 end
 
-print("[Eclipse] LOG - Constructed ReplicatedStorage")
 --DirectoryCreator
+
 	local commanddir = Instance.new("Folder")
 	local serverlocked = Instance.new("BoolValue")
-	--
 	commanddir.Parent = script
 	commanddir.Name = "Commands"
 	serverlocked.Parent = commanddir
 	serverlocked.Name = "ServerLocked"
 	serverlocked.Value = false
 	print("[Eclipse] LOG - Constructed Directories")
+
 --PlayerRequestsGui
+
 local function onCharacterAdded(character, plr)
 	if script.GuiSettings.Active.Value == true then
 		wait(1)
@@ -183,13 +204,17 @@ game.Players.PlayerAdded:Connect(function(plr)
 	wait(2)
 	game.ReplicatedStorage.MessageService:FireClient(plr, "Eclipse Client Loaded")
 end)
+
 --ServerLocked
+
 game.Players.PlayerAdded:Connect(function(plr)
 	if script.Commands.ServerLocked.Value == true then
 		plr:Kick("[Eclipse] Server Locked")
 	end
 end)
+
 --Gui Creator
+
 local gui_backgroundcolor = Color3.fromRGB(script.GuiSettings.gui_backgroundcolorR.Value,script.GuiSettings.gui_backgroundcolorG.Value,script.GuiSettings.gui_backgroundcolorB.Value)
 local gui_textcolor = Color3.fromRGB(script.GuiSettings.gui_textcolorR.Value,script.GuiSettings.gui_textcolorG.Value,script.GuiSettings.gui_textcolorB.Value)
 
@@ -314,7 +339,9 @@ output.TextScaled = true
 output.TextSize = 14.000
 output.TextWrapped = true
 print("[Eclipse] LOG - Cached GUI")
+
 --Permissions
+
 local function checkpermission(user, requiredrank)
 	local hasrank = script.Permissions[requiredrank].Value:find(user.Name)
 	local owner = script.Permissions.Owner.Value:find(user.Name)
@@ -359,7 +386,9 @@ local function checkpermission(user, requiredrank)
 		end
 	end
 end
+
 --Commands
+
 local function runcommand(plr, message, commandupper, rootcommand, eclipsecommand)
 	local command, replaced = string.gsub(rootcommand, " ", "")
 
@@ -476,7 +505,9 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 	else
 	end
 end
+
 --Receive Message
+
 game.Players.PlayerAdded:Connect(function(plr)
 	plr.Chatted:Connect(function(message)
 		local commandupper = message:upper()
@@ -507,7 +538,9 @@ game.ReplicatedStorage.EclipseRestart.OnServerEvent:Connect(function(plr, nill)
 		end
 	end)
 end)
+
 --Startup
+
 local directory = script:GetFullName()
 print("")
 print("-------------------------")
@@ -524,5 +557,5 @@ print("-------------------------")
 print("")
 game.ReplicatedStorage.EclipseRestart:FireAllClients("cmdrestart")
 print("[Eclipse] LOG - Sent EclipseRestart")
-game.ReplicatedStorage.MessageService:FireAllClients("Eclipse Server Loaded")
-print("[Eclipse] LOG - Stack Over, Functions only!")
+webhook("test")
+print("[Eclipse] LOG - Over, Functions only!")
