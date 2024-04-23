@@ -627,7 +627,6 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 					game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
 				end
 			end
-			game.ReplicatedStorage.MessageService:FireAllClients(clientmessage)
 		elseif command == "E!SAVESERVERSETTINGS" then
 			checkpermission(plr,"Owner")
 			game.ReplicatedStorage.MessageService:FireClient(plr, "Attempting Server Save!")
@@ -663,7 +662,7 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			else
 				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
 			end
-		elseif command == "E!TEMPHMOD" then
+		elseif command == "E!TEMPRANK" then
 			checkpermission(plr,"Admin")
 			local split = string.split(commandupper, "E!TEMPHMOD ")
 			local parameter1 = split[2]
@@ -677,22 +676,24 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			else
 				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
 			end
-		elseif command == "E!TEMPMOD" then
-			checkpermission(plr,"Admin")
-			local split = string.split(commandupper, "E!TEMPMOD ")
+		elseif command == "E!BRING" then
+			checkpermission(plr,"HMod")
+			local split = string.split(commandupper, "E!BRING ")
 			local parameter1 = split[2]
 			local sendername = plr.Name
 			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
 			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
 			local plrexists = game.Players:FindFirstChild(plrusername)
-			if plrexists then
-				script.Permissions.Mod.Value = (script.Permissions.Mod.Value.." "..plrusername)
-				game.ReplicatedStorage.MessageService:FireClient(plr, "TempModed "..plrusername)
+			if parameter1 == "ALL" then
+				
 			else
-				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+				if plrexists then
+					game.Workspace[plrusername].HumanoidRootPart.CFrame = game.Workspace[plr.Name].HumanoidRootPart.CFrame
+					game.ReplicatedStorage.MessageService:FireClient(plr, "Brought "..plrusername)
+				else
+					game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+				end
 			end
-		elseif command == "E!BRING" then
-			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
 		elseif command == "E!FLY" then
 			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
 		elseif command == "E!SPEED" then
@@ -700,9 +701,42 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 		elseif command == "E!JUMPPOWER" then
 			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
 		elseif command == "E!TPTO" then
-			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
+			checkpermission(plr,"Mod")
+			local split = string.split(commandupper, "E!TPTO ")
+			local parameter1 = split[2]
+			local sendername = plr.Name
+			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
+			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+			local plrexists = game.Players:FindFirstChild(plrusername)
+				if plrexists then
+					game.Workspace[plr.Name].HumanoidRootPart.CFrame = game.Workspace[plrusername].HumanoidRootPart.CFrame
+					game.ReplicatedStorage.MessageService:FireClient(plr, "Teleported to "..plrusername)
+				else
+					game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+				end
 		elseif command == "E!TP" then
-			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
+			checkpermission(plr,"HMod")
+			local split1a = string.split(commandupper, rootcommand.." ")
+			local split1b = split1a[2]
+			local param1 = split1b:match('^(.-) ')
+			local split2 = string.split(split1b, param1.." ")
+			local param2 = split2[2]
+			local sendername = plr.Name
+				local plrid = game.Players:GetUserIdFromNameAsync(param1)
+				local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+				local plrexists = game.Players:FindFirstChild(plrusername)
+				if plrexists then
+					local plrid2 = game.Players:GetUserIdFromNameAsync(param2)
+					local plrusername2 = game.Players:GetNameFromUserIdAsync(plrid2)
+					local plrexists2 = game.Players:FindFirstChild(plrusername2)
+					if plrexists2 then
+						game.Workspace[plrusername].HumanoidRootPart.CFrame = game.Workspace[plrusername2].HumanoidRootPart.CFrame
+					else
+						game.ReplicatedStorage.MessageService:FireClient(plr, "Destination User is not in the game!")
+					end
+				else
+					game.ReplicatedStorage.MessageService:FireClient(plr, "Target User is not in the game!")
+				end
 		else
 			game.ReplicatedStorage.MessageService:FireClient(plr, "Invalid Command!")
 		end
