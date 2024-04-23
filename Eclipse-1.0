@@ -504,7 +504,9 @@ TextLabel_2.TextSize = 14.000
 TextLabel_2.TextWrapped = true
 local gui_script_exists = script:FindFirstChild("GuiScript")
 if gui_script_exists then
-	script.GuiScript.Parent = GuiDevelopment
+	local gui_script_dupe = script.GuiScript:Clone()
+	guiscript.Name = "GuiScript"
+	guiscript.Parent = GuiDevelopment
 else
 	warn("[Eclipse] WARN - ClientScript is missing inside Eclipse Directory!")
 	local gui_script_replacement = Instance.new("LocalScript")
