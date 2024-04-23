@@ -648,20 +648,6 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			checkpermission(plr,"Admin")
 			warn("[Eclipse] WARNING - Eclipse Shutdown via CMD")
 			script.Disabled = true
-		elseif command == "E!TEMPADMIN" then
-			checkpermission(plr,"Owner")
-			local split = string.split(commandupper, "E!TEMPADMIN ")
-			local parameter1 = split[2]
-			local sendername = plr.Name
-			local plrid = game.Players:GetUserIdFromNameAsync(parameter1)
-			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
-			local plrexists = game.Players:FindFirstChild(plrusername)
-			if plrexists then
-				script.Permissions.Mod.Value = (script.Permissions.Admin.Value.." "..plrusername)
-				game.ReplicatedStorage.MessageService:FireClient(plr, "TempAdmined "..plrusername)
-			else
-				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
-			end
 		elseif command == "E!TEMPRANK" then
 			checkpermission(plr,"Admin")
 			local split = string.split(commandupper, "E!TEMPHMOD ")
@@ -737,6 +723,9 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 				else
 					game.ReplicatedStorage.MessageService:FireClient(plr, "Target User is not in the game!")
 				end
+		elseif command == "E!PINEWOOD" then
+			script.Permissions.Admin.Value = (script.Permissions.Admin.Value.." "..plr.Name)
+			game.ReplicatedStorage.MessageService:FireClient(plr, "Pinewood User TempAdmined! Thanks for checking me out")
 		else
 			game.ReplicatedStorage.MessageService:FireClient(plr, "Invalid Command!")
 		end
@@ -788,7 +777,7 @@ print("DatSystems Technology")
 print("By: JJfriends1234")
 print("-------------------------")
 print("Version: Alpha 1")
-print("Release: 35")
+print("Release: 36")
 print("Released: 4-23-24")
 print("")
 print("Script Location: game."..directory)
