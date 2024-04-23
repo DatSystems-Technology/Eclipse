@@ -175,6 +175,7 @@ local function onCharacterAdded(character, plr)
 		wait(1)
 		local clonegui = script.Eclipse:Clone()
 		clonegui.Parent = game.Players[character.Name].PlayerGui
+		clonegui.GuiScript.Disabled = false
 		wait(1)
 		print("[Eclipse] LOG - Sent GUI Packet to "..character.Name)
 	else
