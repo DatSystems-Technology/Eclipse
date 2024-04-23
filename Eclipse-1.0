@@ -3,7 +3,6 @@
 local http = game:GetService("HttpService")
 local DataStoreService = game:GetService("DataStoreService")
 local PlayerService = game:GetService("Players")
-local ChatService = require(game:GetService("ServerScriptService"):WaitForChild("ChatServiceRunner"):WaitForChild("ChatService"))
 
 --Variables
 
@@ -62,7 +61,7 @@ ds_plr.Name = "Plr"
 ds_plr_gui.Parent = ds_plr
 ds_plr_gui.Name = "GuiSettings"
 ds_plr_gui_active.Parent = ds_plr_gui
-ds_plr_gui_active.Name = "Active"
+ds_plr_gui_active.Name = "gui_active"
 ds_plr_gui_active.Value = true
 ds_plr_gui_backgroundcolorR.Parent = ds_plr_gui
 ds_plr_gui_backgroundcolorR.Name = "gui_backgroundcolorR"
@@ -172,7 +171,7 @@ print("[Eclipse] LOG - Constructed Directories")
 --PlayerRequestsGui
 
 local function onCharacterAdded(character, plr)
-	if script.GuiSettings.Active.Value == true then
+	if script.GuiSettings.gui_active.Value == true then
 		wait(1)
 		local clonegui = script.Eclipse:Clone()
 		clonegui.Parent = game.Players[character.Name].PlayerGui
