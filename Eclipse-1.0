@@ -3,6 +3,7 @@
 local http = game:GetService("HttpService")
 local DataStoreService = game:GetService("DataStoreService")
 local PlayerService = game:GetService("Players")
+local ChatService = require(game:GetService("ServerScriptService"):WaitForChild("ChatServiceRunner"):WaitForChild("ChatService"))
 
 --Variables
 
@@ -501,7 +502,17 @@ TextLabel_2.TextColor3 = gui_backgroundcolor
 TextLabel_2.TextScaled = true
 TextLabel_2.TextSize = 14.000
 TextLabel_2.TextWrapped = true
-script.GuiScript.Parent = GuiDevelopment
+local gui_script_exists = script:FindFirstChild("GuiScript")
+if gui_script_exists then
+	script.GuiScript.Parent = GuiDevelopment
+else
+	warn("[Eclipse] WARN - ClientScript is missing inside Eclipse Directory!")
+	local gui_script_replacement = Instance.new("LocalScript")
+	gui_script_replacement.Parent = GuiDevelopment
+	gui_script_replacement.Disabled = true
+	gui_script_replacement.Name = "GuiScript"
+	warn("[Eclipse] WARN - Created Fake Directory for Eclipse.GuiScript")
+end
 print("[Eclipse] LOG - Cached GUI")
 
 --Permissions
@@ -593,12 +604,28 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			else
 				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
 			end
-		elseif command == "E!MESSAGEALL" then
+		elseif command == "E!MESSAGE" then
 			checkpermission(plr,"Mod")
-			local split = string.split(commandupper, "E!MESSAGEALL ")
-			local parameter1 = split[2]
+			local split1a = string.split(commandupper, rootcommand.." ")
+			local split1b = split1a[2]
+			local param1 = split1b:match('^(.-) ')
+			local split2 = string.split(split1b, param1.." ")
+			local param2 = split2[2]
 			local sendername = plr.Name
-			local clientmessage = ("Message From "..sendername..": "..parameter1)
+			if param1 == "ALL" then
+				local clientmessage = ("Global Message From "..sendername..": "..param2)
+				game.ReplicatedStorage.MessageService:FireAllClients(clientmessage)
+			else
+				local plrid = game.Players:GetUserIdFromNameAsync(param1)
+				local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+				local plrexists = game.Players:FindFirstChild(plrusername)
+				if plrexists then
+					local clientmessage = ("Message From "..sendername..": "..param2)
+					game.ReplicatedStorage.MessageService:FireClient(game.Players[plrusername], clientmessage)
+				else
+					game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+				end
+			end
 			game.ReplicatedStorage.MessageService:FireAllClients(clientmessage)
 		elseif command == "E!SAVESERVERSETTINGS" then
 			checkpermission(plr,"Owner")
