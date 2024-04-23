@@ -692,6 +692,18 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			else
 				game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
 			end
+		elseif command == "E!BRING" then
+			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
+		elseif command == "E!FLY" then
+			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
+		elseif command == "E!SPEED" then
+			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
+		elseif command == "E!JUMPPOWER" then
+			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
+		elseif command == "E!TPTO" then
+			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
+		elseif command == "E!TP" then
+			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
 		else
 			game.ReplicatedStorage.MessageService:FireClient(plr, "Invalid Command!")
 		end
