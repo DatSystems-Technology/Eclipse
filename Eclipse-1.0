@@ -683,7 +683,25 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 		elseif command == "E!FLY" then
 			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
 		elseif command == "E!SPEED" then
-			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
+			checkpermission(plr,"HMod")
+			local split1a = string.split(commandupper, rootcommand.." ")
+			local split1b = split1a[2]
+			local param1 = split1b:match('^(.-) ')
+			local split2 = string.split(split1b, param1.." ")
+			local param2 = split2[2]
+			if param1 == "ALL" then
+			elseif param1 == "ME" then
+				game.Workspace[plr.Name].Character.Humanoid.WalkSpeed = param2
+			else
+			local plrid = game.Players:GetUserIdFromNameAsync(param1)
+			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+			local plrexists = game.Players:FindFirstChild(plrusername)
+				if plrexists then
+					game.Workspace[plrusername].Character.Humanoid.WalkSpeed = param2
+				else
+					game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+				end
+			end
 		elseif command == "E!JUMPPOWER" then
 			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
 		elseif command == "E!TPTO" then
@@ -777,8 +795,8 @@ print("DatSystems Technology")
 print("By: JJfriends1234")
 print("-------------------------")
 print("Version: Alpha 1")
-print("Release: 36")
-print("Released: 4-23-24")
+print("Release: 37")
+print("Released: 4-24-24")
 print("")
 print("Script Location: game."..directory)
 print("-------------------------")
