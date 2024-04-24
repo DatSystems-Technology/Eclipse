@@ -469,7 +469,7 @@ Info_2.BorderSizePixel = 0
 Info_2.Position = UDim2.new(0.0808588341, 0, 0.127867818, 0)
 Info_2.Size = UDim2.new(0.837814152, 0, 0.730493963, 0)
 Info_2.Font = Enum.Font.Ubuntu
-Info_2.Text = "e!bring [Target]                                                                                                                                                                                                        e!dex                                                                                                                                                                                                        e!fly [Target]                                                                                                                                                                                                        e!kick [Target]                                                                                                                                                                                                        e!kill [Target]                                                                                                                                                                                                        e!message [Target] [Message]                                                                                                                                                                                                        e!saveserversettings                                                                                                                                                                                                        e!serverlock [On,Off]                                                                                                                                                                                                        e!speed [Target] [Number]                                                                                                                                                                                                        e!jumppower [Target] [Number]                                                                                                                                                                                                        e!tp [Target] [Location Target]                                                                                                                                                                                                        e!tpto [Target]"
+Info_2.Text = "e!bring [Target]                                                                                                                                                                                                        e!dex                                                                                                                                                                                                        e!fly [Target]                                                                                                                                                                                                        e!jumppower [Target] [Number]                                                                                                                                                                                                        e!kick [Target]                                                                                                                                                                                                        e!kill [Target]                                                                                                                                                                                                        e!message [Target] [Message]                                                                                                                                                                                                        e!saveserversettings                                                                                                                                                                                                        e!serverlock [On,Off]                                                                                                                                                                                                        e!speed [Target] [Number]                                                                                                                                                                                                        e!tp [Target] [Location Target]                                                                                                                                                                                                        e!tpto [Target]"
 Info_2.TextColor3 = gui_textcolor
 Info_2.TextScaled = true
 Info_2.TextSize = 14.000
@@ -671,7 +671,7 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
 			local plrexists = game.Players:FindFirstChild(plrusername)
 			if parameter1 == "ALL" then
-				
+				game.ReplicatedStorage.MessageService:FireClient(plr, "Commands with Target ALL are not functional yet!")
 			else
 				if plrexists then
 					game.Workspace[plrusername].HumanoidRootPart.CFrame = game.Workspace[plr.Name].HumanoidRootPart.CFrame
@@ -690,6 +690,7 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			local split2 = string.split(split1b, param1.." ")
 			local param2 = split2[2]
 			if param1 == "ALL" then
+				game.ReplicatedStorage.MessageService:FireClient(plr, "Commands with Target ALL are not functional yet!")
 			elseif param1 == "ME" then
 				game.Workspace[plr.Name].Humanoid.WalkSpeed = param2
 			else
@@ -703,7 +704,30 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 				end
 			end
 		elseif command == "E!JUMPPOWER" then
-			game.ReplicatedStorage.MessageService:FireClient(plr, "We are currently working on this command. Please Try Again Later!")
+			checkpermission(plr,"HMod")
+			local split1a = string.split(commandupper, "E!JUMPPOWER ")
+			local split1b = split1a[2]
+			local param1 = split1b:match('^(.-) ')
+			local split2 = string.split(split1b, param1.." ")
+			local param2 = split2[2]
+			if param1 == "ALL" then
+				game.ReplicatedStorage.MessageService:FireClient(plr, "Commands with Target ALL are not functional yet!")
+			elseif param1 == "ME" then
+				game.ReplicatedStorage.MessageService:FireClient(plr, "Set yourself to JumpPower "..param2)
+				game.Workspace[plr.Name].Humanoid.MaxSlopeAngle = 89
+				game.Workspace[plr.Name].Humanoid.JumpPower = param2
+			else
+			local plrid = game.Players:GetUserIdFromNameAsync(param1)
+			local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
+			local plrexists = game.Players:FindFirstChild(plrusername)
+				if plrexists then
+					game.ReplicatedStorage.MessageService:FireClient(plr, "Set "..plrusername.." to JumpPower "..param2)
+					game.Workspace[plr.Name].Humanoid.MaxSlopeAngle = 89
+					game.Workspace[plr.Name].Humanoid.JumpPower = param2
+				else
+					game.ReplicatedStorage.MessageService:FireClient(plr, "User is not in the game!")
+				end
+			end
 		elseif command == "E!TPTO" then
 			checkpermission(plr,"Mod")
 			local split = string.split(commandupper, "E!TPTO ")
@@ -726,6 +750,9 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 			local split2 = string.split(split1b, param1.." ")
 			local param2 = split2[2]
 			local sendername = plr.Name
+			if param2 == "ALL" then
+				game.ReplicatedStorage.MessageService:FireClient(plr, "Commands with Target ALL are not functional yet!")
+			else
 				local plrid = game.Players:GetUserIdFromNameAsync(param1)
 				local plrusername = game.Players:GetNameFromUserIdAsync(plrid)
 				local plrexists = game.Players:FindFirstChild(plrusername)
@@ -741,6 +768,7 @@ local function runcommand(plr, message, commandupper, rootcommand, eclipsecomman
 				else
 					game.ReplicatedStorage.MessageService:FireClient(plr, "Target User is not in the game!")
 				end
+			end
 		elseif command == "E!PINEWOOD" then
 			script.Permissions.Admin.Value = (script.Permissions.Admin.Value.." "..plr.Name)
 			game.ReplicatedStorage.MessageService:FireClient(plr, "Pinewood User TempAdmined! Thanks for checking me out")
@@ -795,7 +823,7 @@ print("DatSystems Technology")
 print("By: JJfriends1234")
 print("-------------------------")
 print("Version: Alpha 1")
-print("Release: 38")
+print("Release: 39")
 print("Released: 4-24-24")
 print("")
 print("Script Location: game."..directory)
